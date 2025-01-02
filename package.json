@@ -1,0 +1,22 @@
+{
+  "name": "e-shop-backend",
+  "version": "1.0.0",
+  "description": "e-shop backend project is designed to provide a robust foundation for an online shopping platform. Utilizing Node.js, Express.js, and MongoDB, it enables efficient handling of product data, user authentication, and order management, ensuring scalability and seamless performance.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vikas Mishra",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.3"
+  }
+}
