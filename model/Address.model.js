@@ -19,7 +19,7 @@ const addressSchema = new Schema({
     required: true,
     match: [/^\d{6}$/, "Pin code must be 6 digits"],
   },
-  userId: { type: String, required: true },
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 const virtualId = addressSchema.virtual("id");

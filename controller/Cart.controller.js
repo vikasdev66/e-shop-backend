@@ -13,9 +13,7 @@ export const createCart = async (req, res) => {
 export const getCartByUserId = async (req, res) => {
   try {
     const { userId } = req.query;
-    console.log(userId);
     const cart = await Cart.find({ user: userId }).populate("product");
-    console.log(cart);
     res.status(200).json(cart);
   } catch (error) {
     res.status(400).json({ message: error.message });

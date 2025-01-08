@@ -11,8 +11,8 @@ export const createAddress = async (req, res) => {
 
 export const getAddressByUserId = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const address = Address.find({ userId: userId });
+    const { userId } = req.query;
+    const address = await Address.find({ user: userId });
     res.status(200).json(address);
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -6,6 +6,7 @@ import userRouter from "./routes/User.router.js";
 import authRouter from "./routes/Auth.route.js";
 import addressRouter from "./routes/Address.route.js";
 import cartRouter from "./routes/Cart.route.js";
+import orderRouter from "./routes/Order.route.js";
 import helmet from "helmet";
 import cors from "cors";
 
@@ -25,6 +26,7 @@ app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/addresses", addressRouter);
 app.use("/cart", cartRouter);
+app.use("/orders", orderRouter);
 
 mongoose
   .connect(
