@@ -3,11 +3,13 @@ import {
   createOrder,
   getOrderByUserId,
   updateOrderById,
+  getAllOrders,
 } from "../controller/Order.controller.js";
 
 const router = express.Router();
 
-router.get("/", getOrderByUserId);
+router.get("/own/", getOrderByUserId);
+router.get("/", getAllOrders);
 router.post("/", createOrder);
 router.patch("/:id", updateOrderById);
 
