@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(cors({ exposedHeaders: ["X-Total-Count"] }));
+app.use(cors({ origin: "*", exposedHeaders: ["X-Total-Count"] }));
 
 app.get("/", (req, res) => {
   res.send({ status: "server started successfully" });
