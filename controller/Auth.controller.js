@@ -1,30 +1,60 @@
 import { User } from "../model/User.model.js";
+import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import { sanitizeUser } from "../services/common.js";
 
 export const createUser = async (req, res) => {
   try {
-    const user = await User.create(req.body);
-    res.status(200).json(user);
+    var salt = crypto.randomBytes(16);
+    crypto.pbkdf2(
+      req.body.password,
+      salt,
+      310000,
+      32,
+      "sha256",
+      async function (err, hashedPassword) {
+        const user = await User.create({
+          ...req.body,
+          password: hashedPassword,
+          salt,
+        });
+        req.login(user, (error) => {
+          if (error) {
+            res.status(400).json({ message: error.message });
+          } else {
+            // Create a token
+            const token = jwt.sign(sanitizeUser(user), process.env.SECRET_KEY);
+            res
+              .cookie("jwt", token, {
+                expires: new Date(Date.now() + 3600000),
+                httpOnly: true,
+              })
+              .status(201)
+              .json({ id: user?.id, role: user?.role });
+          }
+        });
+      }
+    );
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
 export const loginUser = async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) {
-      res.status(401).json({ message: "invalid credentials" });
-    } else if (user.password === req.body.password) {
-      res.status(200).json({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      });
-    } else {
-      res.status(401).json({ message: "invalid credentials" });
-    }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+  const user = req.user;
+  res
+    .cookie("jwt", user.token, {
+      expires: new Date(Date.now() + 3600000),
+      httpOnly: true,
+    })
+    .status(201)
+    .json({ id: user.id, role: user.role });
+};
+
+export const checkAuth = async (req, res) => {
+  if (req.user) {
+    res.json(req.user);
+  } else {
+    res.sendStatus(401);
   }
 };

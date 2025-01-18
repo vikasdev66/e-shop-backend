@@ -2,7 +2,8 @@ import { Order } from "../model/Order.model.js";
 
 export const createOrder = async (req, res) => {
   try {
-    const order = await Order.create(req.body);
+    const { id } = req.user;
+    const order = await Order.create({ ...req.body, user: id });
     const populatedOrder = await Order.findById(order._id).populate("address");
     res.status(200).json(populatedOrder);
   } catch (error) {
@@ -12,8 +13,8 @@ export const createOrder = async (req, res) => {
 
 export const getOrderByUserId = async (req, res) => {
   try {
-    const { userId } = req.query;
-    const order = await Order.find({ user: userId }).populate("address");
+    const { id } = req.user;
+    const order = await Order.find({ user: id }).populate("address");
     res.status(200).json(order);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -52,7 +53,6 @@ export const getAllOrders = async (req, res) => {
     }
 
     const totalDocs = await totalOrdersQuery.countDocuments().exec();
-    console.log({ totalDocs });
 
     if (req.query._page && req.query._limit) {
       const pageSize = req.query._limit;

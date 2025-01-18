@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 router.post("/", createAddress);
-router.get("/", getAddressByUserId);
+router.get("/own", getAddressByUserId);
 router.patch("/:id", updateAddressById);
 router.delete("/:id", deleteAddressById);
 

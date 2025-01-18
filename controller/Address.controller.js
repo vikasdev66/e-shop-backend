@@ -2,7 +2,8 @@ import { Address } from "../model/Address.model.js";
 
 export const createAddress = async (req, res) => {
   try {
-    const address = await Address.create(req.body);
+    const { id } = req.user;
+    const address = await Address.create({ ...req.body, user: id });
     res.status(200).json(address);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -11,8 +12,8 @@ export const createAddress = async (req, res) => {
 
 export const getAddressByUserId = async (req, res) => {
   try {
-    const { userId } = req.query;
-    const address = await Address.find({ user: userId });
+    const { id } = req.user;
+    const address = await Address.find({ user: id });
     res.status(200).json(address);
   } catch (error) {
     res.status(400).json({ message: error.message });

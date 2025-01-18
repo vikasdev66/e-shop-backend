@@ -2,7 +2,8 @@ import { Cart } from "../model/Cart.model.js";
 
 export const createCart = async (req, res) => {
   try {
-    const cart = await Cart.create(req.body);
+    const { id } = req.user;
+    const cart = await Cart.create({ ...req.body, user: id });
     const populatedCart = await Cart.findById(cart._id).populate("product");
     res.status(200).json(populatedCart);
   } catch (error) {
@@ -12,8 +13,8 @@ export const createCart = async (req, res) => {
 
 export const getCartByUserId = async (req, res) => {
   try {
-    const { userId } = req.query;
-    const cart = await Cart.find({ user: userId }).populate("product");
+    const { id } = req.user;
+    const cart = await Cart.find({ user: id }).populate("product");
     res.status(200).json(cart);
   } catch (error) {
     res.status(400).json({ message: error.message });
